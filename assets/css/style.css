@@ -1,0 +1,12 @@
+body {
+  background-image: url(https://wallpaperboat.com/wp-content/uploads/2021/04/14/75026/sunny-day-08.jpg);
+}
+
+.container {
+  width: 100%;
+  height: 20px;
+  text-align: center;
+  color: #2d7eab;
+  font-weight: bolder;
+  font-family: "Architects Daughter", cursive;
+}

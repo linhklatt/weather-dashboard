@@ -10,3 +10,27 @@ body {
   font-weight: bolder;
   font-family: "Architects Daughter", cursive;
 }
+
+.flex {
+  display: flex;
+}
+.today {
+  display: flex;
+  flex-direction: column;
+}
+
+#btn,
+#searchList button {
+  background-color: #2d7eab;
+  color: bisque;
+  margin-top: 10px;
+}
+#fiveDays p {
+  background-color: #86c30e;
+  color: bisque;
+}
+#fiveDays {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+}

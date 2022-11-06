@@ -10,13 +10,67 @@
 //declare my variables
 var searchBtn = document.querySelector(".btn");
 var searchInput = document.querySelector("#toSearch");
+var searchForm = document.querySelector("#searchForm");
+var searchList = document.querySelector("#searchList");
+var searchCity = document.querySelector("#searchCity");
+var todaySearch = document.querySelector("#today");
+var fiveDays = document.querySelector("#fiveDays");
+var search = [];
 
-// creating Search button function
-searchBtn.addEventListener("click", function (event) {
-  event.preventDefault();
+// API key from open weather website
+var apiKey = "b75ec22197eabd3066650ab90e7863eb";
+//  fetching api from open weather website
+function weatherUpdate(cityName) {
+  todayResult.innerHTML = "";
+  fiveDays.innerHTML = "";
+  var requestLatLonUrl =
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    cityName +
+    "&limit=5&appid=" +
+    apiKey;
+  fetch(requestLatLonUrl).then(function (response) {
+    return response.json();
+  });
+  then(function (data) {
+    var cityInfo = data[0];
+    var weatherUrl =
+      "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+      cityInfo.lat +
+      "&lon=" +
+      cityInfo.lon +
+      "&exclude=minutely,hourly&units=imperial&appid=" +
+      apiKey;
+  });
 
-  var searchValue = searchInput.value.trim();
-  if (!searchValue) {
-    return;
-  }
-});
+  //fetching weatherURL function
+  fetch(weatherUrl).then(function (response) {
+    return response.json();
+  });
+  then(function (forecastDay) {
+    var cityNameEl = document.createElement("h3");
+    cityNameEl.textContent =
+      cityName.toUpperCase() +
+      " " +
+      moment.unix(forecastDay.current.sunrise).format("MMMM DD, YYYY");
+    // get weather icon
+    var weatherIcon = document.createElement("img");
+    weatherIcon.setAttribute(
+      "src",
+      "https://openweathermap.org/img/w/" +
+        forecastDay.current.weather[0].icon +
+        ".png"
+    );
+    cityNameEl.append(weatherIcon);
+    todayResult.append(cityNameEl);
+  });
+
+  // creating Search button function
+  searchBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    var searchValue = searchInput.value.trim();
+    if (!searchValue) {
+      return;
+    }
+  });
+}

@@ -10,7 +10,9 @@ body {
   font-weight: bolder;
   font-family: "Architects Daughter", cursive;
 }
-
+.col-12 {
+  background: none;
+}
 .flex {
   display: flex;
 }
@@ -19,6 +21,11 @@ body {
   flex-direction: column;
 }
 
+h1,
+h2,
+h3 {
+  color: darkblue;
+}
 #btn,
 #searchList button {
   background-color: #2d7eab;

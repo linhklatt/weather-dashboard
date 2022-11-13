@@ -15,10 +15,11 @@ function weatherUpdate(cityName) {
   fiveDays.innerHTML = "";
 
   var requestLatLonUrl =
-    "https://api.openweathermap.org/geo/1.0/direct?q=" +
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
     cityName +
-    "&limit=5&appid=" +
-    apiKey;
+    "&appid=" +
+    apiKey +
+    "&units=imperial";
   // fetching the data
   fetch(requestLatLonUrl)
     .then(function (response) {
@@ -26,31 +27,37 @@ function weatherUpdate(cityName) {
     })
 
     .then(function (data) {
-      var cityInfo = data[0];
-      var weatherUrl =
-        "https://api.openweathermap.org/data/2.5/forecast?lat=" +
-        cityInfo.lat +
-        "&lon=" +
-        cityInfo.lon +
-        "&appid=" +
-        apiKey;
+      console.log(data);
 
+      // var weatherUrl =
+      //   "https://api.openweathermap.org/data/2.5/forecast?lat=" +
+      //   cityInfo.lat +
+      //   "&lon=" +
+      //   cityInfo.lon +
+      //   "&exclude=minutely,hourly&units=imperial&appid=";
+      // +apiKey;
+      var weatherUrl =
+        "http://api.openweathermap.org/data/2.5/forecast?lat=" +
+        data.coord.lat +
+        "&lon=" +
+        data.coord.lon +
+        "&units=imperial&appid=" +
+        apiKey;
       fetch(weatherUrl)
         .then(function (response) {
           return response.json();
         })
         .then(function (forecastDay) {
+          console.log(forecastDay);
           var cityNameEl = document.createElement("h3");
           cityNameEl.textContent =
-            cityName.toUpperCase() +
+            data.name.toUpperCase() +
             " " +
-            moment.unix(forecastDay.current.sunrise).format("MMMM DD, YYYY");
+            moment.unix(data.dt).format("MMMM DD, YYYY");
           var weatherIcon = document.createElement("img");
           weatherIcon.setAttribute(
             "src",
-            "https://openweathermap.org/img/w/" +
-              forecastDay.current.weather[0].icon +
-              ".png"
+            "https://openweathermap.org/img/w/" + data.weather[0].icon + ".png"
           );
 
           cityNameEl.append(weatherIcon);
@@ -61,31 +68,24 @@ function weatherUpdate(cityName) {
           var humidity = document.createElement("p");
           var uvi = document.createElement("p");
 
-          temperature.textContent =
-            "Temp: " + forecastDay.current.temp + " F " + " ";
-          wind.textContent =
-            " Wind: " + forecastDay.current.wind_speed + " MPH ";
-          humidity.textContent =
-            " Humidity: " + forecastDay.current.humidity + " % ";
-          uvi.textContent = "UV Index: " + forecastDay.current.uvi;
+          temperature.textContent = "Temp: " + data.main.temp + " F " + " ";
+          wind.textContent = " Wind: " + data.wind.speed + " MPH ";
+          humidity.textContent = " Humidity: " + data.main.humidity + " % ";
 
           todayResult.append(temperature);
           todayResult.append(wind);
           todayResult.append(humidity);
-          todayResult.append(uvi);
 
           var fiveDaysResult = document.createElement("h3");
           fiveDaysResult.textContent = "Five Days Forecast";
           fiveDays.append(fiveDaysResult);
 
-          for (var i = 0; i < 5; i++) {
-            var nextDayWeather = forecastDay.daily[i];
+          for (var i = 3; i < forecastDay.list.length; i = i + 8) {
+            var nextDayWeather = forecastDay.list[i];
             var nextDayWeatherCard = document.createElement("p");
             nextDayWeatherCard.classList.add("fiveDaysForecast");
 
-            var date = moment
-              .unix(nextDayWeather.sunrise)
-              .format("MMMM DD, YYYY");
+            var date = moment.unix(nextDayWeather.dt).format("MMMM DD, YYYY");
             nextDayWeatherCard.append(date);
             var weatherIcon = document.createElement("img");
             weatherIcon.setAttribute(
@@ -97,16 +97,16 @@ function weatherUpdate(cityName) {
 
             nextDayWeatherCard.append(weatherIcon);
             var temp = document.createElement("p");
-            temp.textContent = "Temp: " + nextDayWeather.temp.day + " F ";
+            temp.textContent = "Temp: " + nextDayWeather.main.temp + " F ";
             nextDayWeatherCard.append(temp);
 
             var wind = document.createElement("p");
-            wind.textContent = "Wind: " + nextDayWeather.wind_speed + " MPH ";
+            wind.textContent = "Wind: " + nextDayWeather.wind.speed + " MPH ";
             nextDayWeatherCard.append(wind);
 
             var humidity = document.createElement("p");
             humidity.textContent =
-              "Humidity: " + nextDayWeather.humidity + " %";
+              "Humidity: " + nextDayWeather.main.humidity + " %";
             nextDayWeatherCard.append(humidity);
 
             fiveDays.append(nextDayWeatherCard);

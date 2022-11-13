@@ -39,5 +39,10 @@ h3 {
 #fiveDays {
   display: flex;
   flex-direction: row;
-  align-content: space-between;
+  text-align: start;
+  gap: 8px;
+}
+#searchList {
+  display: flex;
+  flex-direction: column;
 }

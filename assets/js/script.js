@@ -37,7 +37,7 @@ function weatherUpdate(cityName) {
       //   "&exclude=minutely,hourly&units=imperial&appid=";
       // +apiKey;
       var weatherUrl =
-        "http://api.openweathermap.org/data/2.5/forecast?lat=" +
+        "https://api.openweathermap.org/data/2.5/forecast?lat=" +
         data.coord.lat +
         "&lon=" +
         data.coord.lon +
